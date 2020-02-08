@@ -12,6 +12,7 @@ long getHash(string& key) {
   return crc.getValue();
 }
 
+//Class to signify a server
 class Server {
  public:
   Server(){
@@ -30,16 +31,21 @@ class ConsistentHashing {
   ConsistentHashing(){
   }
 
+  // We would need to set the number of virtual servers allowed per server
   void Add(Server& s) {
     for (int i = 0; i < num_of_virtual_nodes; ++i) {
       hashring[stol(s.toString() + std::to_string(i))] = s;
     }
   }
+  //Remove a server from the hashring, this will remove virtual nodes as well
   void Remove(Server& s) {
     for (int i = 0; i < num_of_virtual_nodes; ++i) {
       hashring.erase(hashring.find(stol(s.toString() + std::to_string(i))));
     }
   }
+  //Try to find if the key fits directly to any server, if not we find the lower bound
+  // point just greater than the concerned key
+  // if we end up not finding, move to the begining of the loop
   Server get(string& key) {
     long hashPos = getHash(key);
     if (hashring.find(hashPos) == hashring.end()) {
