@@ -7,9 +7,11 @@ using namespace std;
 // This code will not compile
 // This is for my reference only
 long getHash(string& key) {
-  CRC32 crc;
-  crc.update(key);
-  return crc.getValue();
+  string command="crc32 "+key+" >  output";
+  system(command);
+  //Read output file and capture in a long value
+  long value;
+  return value;
 }
 
 //Class to signify a server
